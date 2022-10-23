@@ -1,0 +1,32 @@
+body {
+	background-color: maroon;
+}
+.header {
+	text-align: center;
+	color: tomato;
+	font-size: large;
+}
+
+.card-display {
+	display: flex;
+	color: green;
+	height: auto;
+	justify-content: center;
+	font-weight: bolder;
+	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+	margin-left: 50px;
+}
+
+.deal-button {
+	display: flex;
+	margin-left: 45%;
+	padding: 20px;
+	padding-left: 60px;
+	padding-right: 60px;
+	color: goldenrod;
+	background-color: black;
+}
+
+.denomination {
+	text-align: center;
+}
