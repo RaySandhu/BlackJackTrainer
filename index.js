@@ -1,5 +1,5 @@
 let createDeck = () => {
-	//base creation of a deck of cards at init
+	//base creation of a deck of cards
 	let suits = ['Spades', 'Clubs', 'Hearts', 'Diamonds'];
 	let deck = [];
 	let id = 0;
@@ -22,7 +22,8 @@ let newDeck = createDeck();
 
 let randomCard = () => {
 	//draws a random card and removes that card from existing deck.
-	let randomCard = newDeck[Math.ceil(Math.random() * 52)];
+	let i = Math.ceil(Math.random() * (newDeck.length - 1));
+	let randomCard = newDeck[i];
 	// newDeck = newDeck.filter((card) => {
 	// 	card.id != randomCard.id;
 	// });
@@ -38,8 +39,9 @@ let randomCard = () => {
 let dealtHand = () => {
 	//draws in the art for cards being dealt
 	let CARD_WIDTH = 28;
-	let suit = randomCard().suit;
-	let value = randomCard().value;
+	let randomDrawnCard = randomCard();
+	let suit = randomDrawnCard.suit;
+	let value = randomDrawnCard.value;
 	let infoLine = '';
 	for (let i = 0; i <= CARD_WIDTH - suit.length; i++) {
 		if (i == 5) {
