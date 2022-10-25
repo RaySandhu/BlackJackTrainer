@@ -88,34 +88,42 @@ let playerHand = [randomCard(), randomCard()];
 let dealerHandValue = cardValue(dealerHand[0]);
 let playerHandValue = cardValue(playerHand[0]) + cardValue(playerHand[1]);
 
-function newDeal() {
-	newDeck = createDeck();
-	dealerHand = dealerHand.push(randomCard());
-	playerHand = playerHand.push(randomCard(), randomCard());
-}
-
 function cardValue(card) {
 	if (typeof card.value == 'string') {
 		return 10;
 	} else return card.value;
 }
 
-//initial renders of hands
 let playerHandHtml = document.getElementById('playerHand');
-playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
 let dealerHandHtml = document.getElementById('dealerHand');
-dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
 
+//initial renders of hands
+function initialRender() {
+	playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
+	dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
+}
+
+initialRender();
 function hit() {
-	playerHand.push(randomCard());
+	let newCard = randomCard();
+	playerHand.push(newCard);
+	playerHandValue += cardValue(newCard);
 	playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
 }
 
 function pass() {
 	while (dealerHandValue < 17) {
-		dealerHand.push(randomCard());
-		dealerHandValue += cardValue(dealerHand[dealerHand.length - 1]);
+		let newCard = randomCard();
+		dealerHand.push(newCard);
+		dealerHandValue += cardValue(newCard);
 		// console.log(dealerHand, dealerHandValue);
 		dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
 	}
+}
+
+function newDeal() {
+	newDeck = createDeck();
+	dealerHand = [randomCard()];
+	playerHand = [randomCard(), randomCard()];
+	console.log(newDeck, dealerHand, playerHand);
 }
