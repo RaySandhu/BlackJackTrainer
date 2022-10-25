@@ -10,8 +10,12 @@
 		<link rel="stylesheet" href="index.css" />
 		<div class="header"><h1>BlackJack Dealer</h1></div>
 		<h1 class="denomination">Dealer</h1>
-		<main id="dealerHand" class="card-display"></main>
-		<button onclick="deal()" class="deal-button">Deal</button>
+		<div id="dealerHand" class="card-display"></div>
+		<div id="button-set">
+			<button onclick="hit()">Hit</button>
+			<button onclick="pass()">Pass</button>
+			<button onclick="newDeal()" class="deal-button">Deal</button>
+		</div>
 		<h1 class="denomination">Player</h1>
 		<div id="playerHand" class="card-display"></div>
 	</body>

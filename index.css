@@ -17,12 +17,15 @@ body {
 	margin-left: 50px;
 }
 
-.deal-button {
+.button-set {
 	display: flex;
 	margin-left: 45%;
 	padding: 20px;
 	padding-left: 60px;
 	padding-right: 60px;
+}
+
+.button-set button {
 	color: goldenrod;
 	background-color: black;
 }
