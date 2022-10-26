@@ -94,21 +94,42 @@ function cardValue(card) {
 	} else return card.value;
 }
 
+//html id tags
 let playerHandHtml = document.getElementById('playerHand');
 let dealerHandHtml = document.getElementById('dealerHand');
+let playerScoreHtml = document.getElementById('playerScore');
+let dealerScoreHtml = document.getElementById('dealerScore');
+let gameResultHtml = document.getElementById('gameResult');
 
-//initial renders of hands
-function initialRender() {
+function updatePlayer() {
 	playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
+	if (playerHandValue > 21) {
+		playerScoreHtml.innerHTML = 'You busted with a ' + playerHandValue;
+	} else playerScoreHtml.innerHTML = playerHandValue;
+}
+function updateDealer() {
 	dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
+	if (dealerHandValue > 21) {
+		dealerScoreHtml.innerHTML = 'Dealer busts! You win!';
+	} else dealerScoreHtml.innerHTML = dealerHandValue;
 }
 
-initialRender();
+function updateGameResult() {
+	if (dealerHandValue > playerHandValue || playerHandValue > 21) {
+		gameResultHtml.innerHTML = 'You Lose!';
+	} else if (dealerHandValue == playerHandValue) {
+		gameResultHtml.innerHTML = 'Split.';
+	} else gameResultHtml.innerHTML = 'You Win!';
+}
+
 function hit() {
 	let newCard = randomCard();
 	playerHand.push(newCard);
 	playerHandValue += cardValue(newCard);
-	playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
+	playerHandValue > 21
+		? (gameResultHtml.innerHTML = '<h1 style="color: blue">You Lose!</h1>')
+		: null;
+	updatePlayer();
 }
 
 function pass() {
@@ -116,8 +137,8 @@ function pass() {
 		let newCard = randomCard();
 		dealerHand.push(newCard);
 		dealerHandValue += cardValue(newCard);
-		// console.log(dealerHand, dealerHandValue);
-		dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
+		updateDealer();
+		updateGameResult();
 	}
 }
 
@@ -125,5 +146,15 @@ function newDeal() {
 	newDeck = createDeck();
 	dealerHand = [randomCard()];
 	playerHand = [randomCard(), randomCard()];
-	console.log(newDeck, dealerHand, playerHand);
+	dealerHandValue = cardValue(dealerHand[0]);
+	playerHandValue = cardValue(playerHand[0]) + cardValue(playerHand[1]);
+	updatePlayer();
+	updateDealer();
+	gameResultHtml.innerHTML = '';
 }
+
+//initial renders of hands and scores
+playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
+dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
+playerScoreHtml.innerHTML = playerHandValue;
+dealerScoreHtml.innerHTML = dealerHandValue;
