@@ -115,6 +115,8 @@ function updateDealer() {
 }
 
 function updateGameResult() {
+	document.getElementById('hit').disabled = true;
+	document.getElementById('pass').disabled = true;
 	if (dealerHandValue > playerHandValue || playerHandValue > 21) {
 		gameResultHtml.innerHTML = 'You Lose!';
 	} else if (dealerHandValue == playerHandValue) {
@@ -126,9 +128,11 @@ function hit() {
 	let newCard = randomCard();
 	playerHand.push(newCard);
 	playerHandValue += cardValue(newCard);
-	playerHandValue > 21
-		? (gameResultHtml.innerHTML = '<h1 style="color: blue">You Lose!</h1>')
-		: null;
+	if (playerHandValue > 21) {
+		document.getElementById('hit').disabled = true;
+		document.getElementById('pass').disabled = true;
+		gameResultHtml.innerHTML = '<h1 style="color: blue">You Lose!</h1>';
+	}
 	updatePlayer();
 }
 
@@ -150,10 +154,12 @@ function newDeal() {
 	playerHandValue = cardValue(playerHand[0]) + cardValue(playerHand[1]);
 	updatePlayer();
 	updateDealer();
+	document.getElementById('hit').disabled = false;
+	document.getElementById('pass').disabled = false;
 	gameResultHtml.innerHTML = '';
 }
 
-//initial renders of hands and scores
+//initial rendering of hands and scores
 playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
 dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
 playerScoreHtml.innerHTML = playerHandValue;
