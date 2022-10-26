@@ -64,7 +64,7 @@ let cardRender = (card) => {
 		}
 	}
 
-	return `<pre>
+	return `<pre> <h2>
  ---------------------------
 |                            |
 |${infoLine}|
@@ -85,6 +85,7 @@ let cardRender = (card) => {
 |                            |
 |                            |
  ---------------------------
+ </h2>
 </pre>`;
 };
 
