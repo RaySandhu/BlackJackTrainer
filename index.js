@@ -64,8 +64,7 @@ let cardRender = (card) => {
 		}
 	}
 
-	return `<pre> <h2>
- ---------------------------
+	return `<pre> <h2 style="background-color: #FAF9F6; border-radius: 10%"> ----------------------------
 |                            |
 |${infoLine}|
 |                            |
@@ -84,9 +83,7 @@ let cardRender = (card) => {
 |                            |
 |                            |
 |                            |
- ---------------------------
- </h2>
-</pre>`;
+ ----------------------------</h2></pre>`;
 };
 
 function handValue(hand) {
@@ -124,16 +121,20 @@ let dealerScoreHtml = document.getElementById('dealerScore');
 let gameResultHtml = document.getElementById('gameResult');
 
 function updatePlayer() {
-	playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
+	playerHandHtml.innerHTML = playerHand
+		.map((card) => cardRender(card))
+		.join('');
 	if (playerHandValue > 21) {
 		playerScoreHtml.innerHTML = 'You busted with a ' + playerHandValue;
 	} else playerScoreHtml.innerHTML = playerHandValue;
 }
 function updateDealer() {
-	dealerHandHtml.innerHTML = dealerHand.map((card) => {
-		// setInterval(null, 2000); how to stagger dealer show?
-		return cardRender(card);
-	});
+	dealerHandHtml.innerHTML = dealerHand
+		.map((card) => {
+			// setInterval(null, 2000); how to stagger dealer show?
+			return cardRender(card);
+		})
+		.join('');
 	if (dealerHandValue > 21) {
 		dealerScoreHtml.innerHTML = 'Dealer busts! You win!';
 	} else dealerScoreHtml.innerHTML = dealerHandValue;
@@ -142,7 +143,10 @@ function updateDealer() {
 function updateGameResult() {
 	document.getElementById('hit').disabled = true;
 	document.getElementById('pass').disabled = true;
-	if (dealerHandValue > playerHandValue || playerHandValue > 21) {
+	if (
+		(dealerHandValue > playerHandValue && dealerHandValue <= 21) ||
+		playerHandValue > 21
+	) {
 		gameResultHtml.innerHTML = 'You Lose!';
 	} else if (dealerHandValue == playerHandValue) {
 		gameResultHtml.innerHTML = 'Split.';
@@ -183,7 +187,7 @@ function newDeal() {
 }
 
 //initial rendering of hands and scores
-playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card));
-dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
+playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card)).join('');
+dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card)).join('');
 playerScoreHtml.innerHTML = playerHandValue;
 dealerScoreHtml.innerHTML = dealerHandValue;

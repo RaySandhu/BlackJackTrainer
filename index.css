@@ -3,7 +3,7 @@ body {
 }
 .header {
 	text-align: center;
-	color: tomato;
+	color: goldenrod;
 	font-size: large;
 }
 
@@ -14,27 +14,58 @@ body {
 	justify-content: center;
 	font-weight: bolder;
 	font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-	margin-left: 50px;
 	overflow: scroll;
+	border-radius: 15%;
 }
 
 .button-set {
 	display: flex;
-	margin-left: 45%;
-	padding: 20px;
-	padding-left: 60px;
-	padding-right: 60px;
+	justify-content: center;
 }
 
 .button-set button {
 	color: goldenrod;
 	background-color: black;
+	height: 4rem;
+	font-size: large;
+	width: 6rem;
+	margin-left: 10px;
+	margin-right: 10px;
+	cursor: pointer;
+	border-radius: 5%;
+	margin: 1%;
+}
+
+.button-set button:disabled {
+	background-color: slategray;
+	color: black;
+	cursor: default;
+}
+
+.player-display {
+	display: flex;
+	background-color: #2f6b4d;
+}
+.player-info {
+	padding-top: 10%;
+	flex-direction: row;
+	background-color: #2f6b4d;
+	align-items: center;
+	justify-content: center;
+	width: 20rem;
 }
 
 .denomination {
 	text-align: center;
+	color: aliceblue;
 }
 
 .score {
 	text-align: center;
+}
+
+.game-result {
+	text-align: center;
+	font-weight: bolder;
+	color: goldenrod;
 }
