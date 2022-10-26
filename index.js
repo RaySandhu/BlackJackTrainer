@@ -5,11 +5,17 @@ let createDeck = () => {
 	let id = 0;
 	let faces = ['Jack', 'Queen', 'King'];
 	for (var i = 1; i <= 13; i++) {
+		let cardVal; //accounts for face cards and aces
+		if (i == 1) {
+			cardVal = 'A';
+		} else if (i > 10) {
+			cardVal = faces[i - 11];
+		} else cardVal = i;
 		suits.forEach((suit) => {
 			card = {
 				//composition of each card in deck
 				id: id,
-				value: i <= 10 ? i : faces[i - 11], //accounts for face cards
+				value: cardVal,
 				suit: suit,
 			};
 			id++;
@@ -82,17 +88,32 @@ let cardRender = (card) => {
 </pre>`;
 };
 
+function handValue(hand) {
+	let handValue = 0;
+	let hasAce = false;
+	hand.forEach((card) => {
+		if (card.value == 'A' && handValue + 11 <= 21) {
+			handValue += 11;
+			hasAce = true;
+		} else if (card.value == 'A' && handValue + 11 > 21) {
+			handValue += 1;
+		} else if (typeof card.value == 'string') {
+			handValue += 10;
+		} else handValue += card.value;
+
+		if (handValue > 21 && hasAce) {
+			//handles player busting but with a reducable ace
+			handValue -= 10;
+			hasAce = false;
+		}
+	});
+	return handValue;
+}
 let dealerHand = [randomCard()];
 let playerHand = [randomCard(), randomCard()];
 
-let dealerHandValue = cardValue(dealerHand[0]);
-let playerHandValue = cardValue(playerHand[0]) + cardValue(playerHand[1]);
-
-function cardValue(card) {
-	if (typeof card.value == 'string') {
-		return 10;
-	} else return card.value;
-}
+let dealerHandValue = handValue(dealerHand);
+let playerHandValue = handValue(playerHand);
 
 //html id tags
 let playerHandHtml = document.getElementById('playerHand');
@@ -108,7 +129,10 @@ function updatePlayer() {
 	} else playerScoreHtml.innerHTML = playerHandValue;
 }
 function updateDealer() {
-	dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card));
+	dealerHandHtml.innerHTML = dealerHand.map((card) => {
+		// setInterval(null, 2000); how to stagger dealer show?
+		return cardRender(card);
+	});
 	if (dealerHandValue > 21) {
 		dealerScoreHtml.innerHTML = 'Dealer busts! You win!';
 	} else dealerScoreHtml.innerHTML = dealerHandValue;
@@ -127,11 +151,9 @@ function updateGameResult() {
 function hit() {
 	let newCard = randomCard();
 	playerHand.push(newCard);
-	playerHandValue += cardValue(newCard);
+	playerHandValue = handValue(playerHand);
 	if (playerHandValue > 21) {
-		document.getElementById('hit').disabled = true;
-		document.getElementById('pass').disabled = true;
-		gameResultHtml.innerHTML = '<h1 style="color: blue">You Lose!</h1>';
+		updateGameResult();
 	}
 	updatePlayer();
 }
@@ -140,18 +162,18 @@ function pass() {
 	while (dealerHandValue < 17) {
 		let newCard = randomCard();
 		dealerHand.push(newCard);
-		dealerHandValue += cardValue(newCard);
+		dealerHandValue = handValue(dealerHand);
 		updateDealer();
-		updateGameResult();
 	}
+	updateGameResult();
 }
 
 function newDeal() {
 	newDeck = createDeck();
 	dealerHand = [randomCard()];
 	playerHand = [randomCard(), randomCard()];
-	dealerHandValue = cardValue(dealerHand[0]);
-	playerHandValue = cardValue(playerHand[0]) + cardValue(playerHand[1]);
+	dealerHandValue = handValue(dealerHand);
+	playerHandValue = handValue(playerHand);
 	updatePlayer();
 	updateDealer();
 	document.getElementById('hit').disabled = false;
