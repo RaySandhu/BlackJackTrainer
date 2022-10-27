@@ -8,9 +8,11 @@ body {
 	background-color: maroon;
 }
 .header {
-	text-align: center;
 	color: goldenrod;
-	font-size: large;
+	font-size: 4rem;
+	vertical-align: middle;
+	margin-left: 2rem;
+	margin-right: 2rem;
 }
 
 .card-display {
@@ -39,7 +41,7 @@ body {
 	margin-right: 10px;
 	cursor: pointer;
 	border-radius: 5%;
-	margin: 1%;
+	margin-top: 3%;
 }
 
 .button-set button:disabled {

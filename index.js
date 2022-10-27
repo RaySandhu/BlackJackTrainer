@@ -64,7 +64,7 @@ let cardRender = (card) => {
 		}
 	}
 
-	return `<pre> <h2 style="background-color: #FAF9F6; border-radius: 10%"> ------------------------
+	return `<pre> <h2 style="background-color: #FAF9F6; border-radius: 10%; margin-right: 5%; margin-left: -2%" margin-top: -2%> ------------------------
 |                        |
 |${infoLine}|
 |                        |
