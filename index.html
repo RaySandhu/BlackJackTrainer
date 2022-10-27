@@ -27,6 +27,11 @@
 			<div class="player-info">
 				<h1 class="denomination">Player</h1>
 				<h2 id="playerScore" class="score"></h2>
+				<div class="stack-info">
+					<label for="stackSize">Your chips: </label>
+					<div id="stackSize"></div>
+					<input type="number" placeholder="Bet Size" id="betSize" min="0" max="stackSize.value"></input>
+				</div>
 			</div>
 			<div id="playerHand" class="card-display"></div>
 		</div>

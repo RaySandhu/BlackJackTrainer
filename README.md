@@ -5,7 +5,9 @@ Single player BlackJack with simple, unambitious HTML art to kill time.
 Future features to implement
 
 1. Chip system
-2. Simple mouse control for hit, pass, and bet sizing
-3. Card counter
+2. Pair splitting - plan with multiplayer - transition to React?
+3. Double downs
+4. Simple mouse control for hit, pass, and bet sizing
+5. Card counter
    a. Deck shuffling should support that
-4. Multiplayer
+6. Multiplayer

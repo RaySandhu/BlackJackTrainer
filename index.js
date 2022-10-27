@@ -97,7 +97,7 @@ function handValue(hand) {
 		} else handValue += card.value;
 
 		if (handValue > 21 && hasAce) {
-			//handles player busting but with a reducable ace
+			//handles player busting but with a reducable ace !!! DEALER DOES NOT PLAY SOFTS (fix with multiplayer?)
 			handValue -= 10;
 			hasAce = false;
 		}
@@ -106,6 +106,8 @@ function handValue(hand) {
 }
 let dealerHand = [randomCard()];
 let playerHand = [randomCard(), randomCard()];
+let stackSize = 100;
+let betSize = document.getElementById('betSize').value;
 
 let dealerHandValue = handValue(dealerHand);
 let playerHandValue = handValue(playerHand);
@@ -116,6 +118,7 @@ let dealerHandHtml = document.getElementById('dealerHand');
 let playerScoreHtml = document.getElementById('playerScore');
 let dealerScoreHtml = document.getElementById('dealerScore');
 let gameResultHtml = document.getElementById('gameResult');
+let stackSizeHtml = document.getElementById('stackSize');
 
 function updatePlayer() {
 	playerHandHtml.innerHTML = playerHand
@@ -125,10 +128,11 @@ function updatePlayer() {
 		playerScoreHtml.innerHTML = 'You busted with a ' + playerHandValue;
 	} else playerScoreHtml.innerHTML = playerHandValue;
 }
+
 function updateDealer() {
 	dealerHandHtml.innerHTML = dealerHand
 		.map((card) => {
-			// setInterval(null, 2000); how to stagger dealer show?
+			// renderInterval = setTimeout(cardRender, 2000, card);
 			return cardRender(card);
 		})
 		.join('');
@@ -167,6 +171,7 @@ function pass() {
 		dealerHandValue = handValue(dealerHand);
 		updateDealer();
 	}
+	console.log(betSize);
 	updateGameResult();
 }
 
@@ -188,3 +193,10 @@ playerHandHtml.innerHTML = playerHand.map((card) => cardRender(card)).join('');
 dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card)).join('');
 playerScoreHtml.innerHTML = playerHandValue;
 dealerScoreHtml.innerHTML = dealerHandValue;
+stackSizeHtml.innerHTML = stackSize;
+
+window.onload = () => {
+	alert(
+		'Hello! This is a simple Blackjack game which shuffles the hand on each new deal and Dealer does not hit soft 17. Enjoy!'
+	);
+};
