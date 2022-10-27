@@ -44,46 +44,43 @@ let randomCard = () => {
 
 let cardRender = (card) => {
 	//draws in the art for cards being dealt
-	let CARD_WIDTH = 28;
+	let CARD_WIDTH = 24;
 
 	let suit = card.suit;
 	let value = card.value;
 	let infoLine = '';
 	for (let i = 0; i <= CARD_WIDTH - suit.length; i++) {
-		if (i == 5) {
+		if (i == 3) {
 			typeof value == 'number' && value == 10
 				? (i += 1)
 				: typeof value == 'string'
 				? (i += value.length - 1)
 				: i;
 			infoLine += value;
-		} else if (i == 17) {
+		} else if (i == 12) {
 			infoLine += suit;
 		} else {
 			infoLine += ' ';
 		}
 	}
 
-	return `<pre> <h2 style="background-color: #FAF9F6; border-radius: 10%"> ----------------------------
-|                            |
+	return `<pre> <h2 style="background-color: #FAF9F6; border-radius: 10%"> ------------------------
+|                        |
 |${infoLine}|
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
-|                            |
- ----------------------------</h2></pre>`;
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+|                        |
+ ------------------------</h2></pre>`;
 };
 
 function handValue(hand) {
