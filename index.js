@@ -63,8 +63,18 @@ let cardRender = (card) => {
 			infoLine += ' ';
 		}
 	}
+	let cardColor = 'black';
+	if (card.suit == 'Hearts' || card.suit == 'Diamonds') {
+		console.log('color switch');
+		cardColor = 'red';
+	}
 
-	return `<pre> <h2 style="background-color: #FAF9F6; border-radius: 10%; margin-right: 5%; margin-left: -2%" margin-top: -2%> ------------------------
+	return `<pre> <h2 style="background-color: #FAF9F6;
+	color: ${cardColor};
+	border-radius: 10%; 
+	margin-right: 5%; 
+	margin-left: -2%";
+	margin-top: -2%> ------------------------
 |                        |
 |${infoLine}|
 |                        |
@@ -106,9 +116,7 @@ function handValue(hand) {
 }
 let dealerHand = [randomCard()];
 let playerHand = [randomCard(), randomCard()];
-let stackSize = 100;
-let betSize = document.getElementById('betSize').value;
-
+let stackSize = 101;
 let dealerHandValue = handValue(dealerHand);
 let playerHandValue = handValue(playerHand);
 
@@ -118,7 +126,10 @@ let dealerHandHtml = document.getElementById('dealerHand');
 let playerScoreHtml = document.getElementById('playerScore');
 let dealerScoreHtml = document.getElementById('dealerScore');
 let gameResultHtml = document.getElementById('gameResult');
+let betSizeHtml = document.getElementById('betSize');
 let stackSizeHtml = document.getElementById('stackSize');
+
+let betSize = () => betSizeHtml.value;
 
 function updatePlayer() {
 	playerHandHtml.innerHTML = playerHand
@@ -171,7 +182,7 @@ function pass() {
 		dealerHandValue = handValue(dealerHand);
 		updateDealer();
 	}
-	console.log(betSize);
+	console.log(betSize());
 	updateGameResult();
 }
 
@@ -186,6 +197,7 @@ function newDeal() {
 	document.getElementById('hit').disabled = false;
 	document.getElementById('pass').disabled = false;
 	gameResultHtml.innerHTML = '';
+	stackSizeHtml.setAttribute('max', stackSize);
 }
 
 //initial rendering of hands and scores

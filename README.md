@@ -11,3 +11,4 @@ Future features to implement
 5. Card counter
    a. Deck shuffling should support that
 6. Multiplayer
+7. Add help button for basic BlackJack
