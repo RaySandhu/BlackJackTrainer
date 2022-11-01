@@ -65,7 +65,6 @@ let cardRender = (card) => {
 	}
 	let cardColor = 'black';
 	if (card.suit == 'Hearts' || card.suit == 'Diamonds') {
-		console.log('color switch');
 		cardColor = 'red';
 	}
 
@@ -74,23 +73,23 @@ let cardRender = (card) => {
 	border-radius: 10%; 
 	margin-right: 5%; 
 	margin-left: -2%";
-	margin-top: -2%> ------------------------
-|                        |
-|${infoLine}|
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
-|                        |
- ------------------------</h2></pre>`;
+	margin-top: -2%> 			
+                        
+${infoLine}
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+			</h2></pre>`;
 };
 
 function handValue(hand) {
@@ -116,7 +115,7 @@ function handValue(hand) {
 }
 let dealerHand = [randomCard()];
 let playerHand = [randomCard(), randomCard()];
-let stackSize = 101;
+let stackSize = 100;
 let dealerHandValue = handValue(dealerHand);
 let playerHandValue = handValue(playerHand);
 
@@ -128,8 +127,24 @@ let dealerScoreHtml = document.getElementById('dealerScore');
 let gameResultHtml = document.getElementById('gameResult');
 let betSizeHtml = document.getElementById('betSize');
 let stackSizeHtml = document.getElementById('stackSize');
+let betDisplayHtml = document.getElementById('betDisplay');
+stackSizeHtml.setAttribute('max', stackSize);
 
-let betSize = () => betSizeHtml.value;
+//betting info
+let winCounter = 0;
+let lossCounter = 0;
+let betSize = 0;
+
+function initBet() {
+	//betting initialize
+	if (betSize == 0) {
+		betSize = betSizeHtml.value;
+		stackSize -= betSize;
+		stackSizeHtml.innerHTML = stackSize;
+		betDisplayHtml.innerHTML = `<h2>Current bet is: </h2><h3>${betSize}</h3>`;
+		betSize.disabled = true;
+	}
+}
 
 function updatePlayer() {
 	playerHandHtml.innerHTML = playerHand
@@ -138,6 +153,9 @@ function updatePlayer() {
 	if (playerHandValue > 21) {
 		playerScoreHtml.innerHTML = 'You busted with a ' + playerHandValue;
 	} else playerScoreHtml.innerHTML = playerHandValue;
+
+	//betting info
+	stackSizeHtml.innerHTML = stackSize;
 }
 
 function updateDealer() {
@@ -160,9 +178,20 @@ function updateGameResult() {
 		playerHandValue > 21
 	) {
 		gameResultHtml.innerHTML = 'You Lose!';
+		lossCounter++;
 	} else if (dealerHandValue == playerHandValue) {
 		gameResultHtml.innerHTML = 'Split.';
-	} else gameResultHtml.innerHTML = 'You Win!';
+		stackSize += parseInt(betSize);
+		console.log(stackSize);
+		stackSizeHtml.innerHTML = stackSize;
+	} else {
+		gameResultHtml.innerHTML = 'You Win!';
+		stackSize += parseInt(betSize);
+		stackSize += parseInt(betSize);
+		console.log(stackSize);
+		stackSizeHtml.innerHTML = stackSize;
+		winCounter++;
+	}
 }
 
 function hit() {
@@ -172,6 +201,7 @@ function hit() {
 	if (playerHandValue > 21) {
 		updateGameResult();
 	}
+	initBet();
 	updatePlayer();
 }
 
@@ -182,7 +212,7 @@ function pass() {
 		dealerHandValue = handValue(dealerHand);
 		updateDealer();
 	}
-	console.log(betSize());
+	initBet();
 	updateGameResult();
 }
 
@@ -192,12 +222,26 @@ function newDeal() {
 	playerHand = [randomCard(), randomCard()];
 	dealerHandValue = handValue(dealerHand);
 	playerHandValue = handValue(playerHand);
-	updatePlayer();
-	updateDealer();
+
 	document.getElementById('hit').disabled = false;
 	document.getElementById('pass').disabled = false;
 	gameResultHtml.innerHTML = '';
-	stackSizeHtml.setAttribute('max', stackSize);
+
+	//betting info
+	betDisplayHtml.innerHTML = '';
+	betSize = 0;
+	betSize.disabled = false;
+	stackSizeHtml.innerHTML = stackSize;
+	betSizeHtml.setAttribute('max', stackSize);
+	console.log(
+		'You have won ',
+		winCounter,
+		' times and lost ',
+		lossCounter,
+		' times.'
+	);
+	updatePlayer();
+	updateDealer();
 }
 
 //initial rendering of hands and scores
@@ -209,6 +253,11 @@ stackSizeHtml.innerHTML = stackSize;
 
 window.onload = () => {
 	alert(
-		'Hello! This is a simple Blackjack game which shuffles the hand on each new deal and Dealer does not hit soft 17. Enjoy!'
+		`Hello! 
+
+		This is a simple Blackjack game which shuffles the hand on each new deal and Dealer does not hit soft 17.
+		Place your bets anytime before your first move. You cannot sit out any hands currently.
+		
+		Enjoy!`
 	);
 };

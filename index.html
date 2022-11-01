@@ -30,7 +30,9 @@
 				<div class="stack-info">
 					<label for="stackSize">Your chips: </label>
 					<div id="stackSize"></div>
-					<input type="number" id="betSize" placeholder="Bet Size" min="5" max="myVar" value="5"></input>
+					<input type="number" id="betSize" placeholder="Bet Size" min="5" max="100" value="5"></input>
+					<button id="submitBet" onclick="initBet()"> Enter Bet </button>
+					<div id="betDisplay" class="bet-display"></div>
 				</div>
 			</div>
 			<div id="playerHand" class="card-display"></div>
