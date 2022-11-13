@@ -106,7 +106,7 @@ function handValue(hand) {
 		} else handValue += card.value;
 
 		if (handValue > 21 && hasAce) {
-			//handles player busting but with a reducable ace !!! DEALER DOES NOT PLAY SOFTS (fix with multiplayer?)
+			//handles player busting but with a reducable ace and dealer stays on soft 17
 			handValue -= 10;
 			hasAce = false;
 		}
@@ -114,11 +114,11 @@ function handValue(hand) {
 	return handValue;
 }
 
-let gameStatus = false;
+let gameInProg = false;
 let dealerHand = [];
 let playerHand = [];
 let stackSize = 100;
-let betSize = 0;
+let betSize;
 let dealerHandValue = handValue(dealerHand);
 let playerHandValue = handValue(playerHand);
 
@@ -131,30 +131,14 @@ let gameResultHtml = document.getElementById('gameResult');
 let betSizeHtml = document.getElementById('betSize');
 let stackSizeHtml = document.getElementById('stackSize');
 let betDisplayHtml = document.getElementById('betDisplay');
-let submitBet = document.getElementById('submitBet');
+let submitBetHtml = document.getElementById('submitBet');
+let resetHtml = document.getElementById('reset');
 betSizeHtml.setAttribute('max', stackSize);
 
-function initBet() {
-	// betting initialize -- only runs when player has submitted bet.
-	// also deals new hands, this gives player control of when to start next round.
-	if (betSize == 0) {
-		betSize = betSizeHtml.value;
-		stackSize -= betSize;
-		stackSizeHtml.innerHTML = stackSize;
-		betDisplayHtml.innerHTML = `<h2>Current bet is: </h2><h3>${betSize}</h3>`;
-		submitBet.disabled = true;
-	}
-	dealerHand = [randomCard()];
-	playerHand = [randomCard(), randomCard()];
-	dealerHandValue = handValue(dealerHand);
-	playerHandValue = handValue(playerHand);
-
-	document.getElementById('hit').disabled = false;
-	document.getElementById('pass').disabled = false;
-
-	updatePlayer();
-	updateDealer();
-}
+//game flow functions
+// 	update player responds to changes by player to update player hand and stack
+// 	update dealer responds to changes within dealer status of hand and its value
+//	gameresult runs at the end of the hand and assigns decision of game and handles bets.
 
 function updatePlayer() {
 	// simply renders the hand from a hit or new deal and updates display for handvalue and stack size.
@@ -162,7 +146,7 @@ function updatePlayer() {
 		.map((card) => cardRender(card))
 		.join('');
 	if (playerHandValue > 21) {
-		playerScoreHtml.innerHTML = 'You busted with a ' + playerHandValue;
+		updateGameResult();
 	} else playerScoreHtml.innerHTML = playerHandValue;
 
 	//betting info
@@ -177,14 +161,13 @@ function updateDealer() {
 		})
 		.join('');
 	if (dealerHandValue > 21) {
-		dealerScoreHtml.innerHTML = 'Dealer busts! You win!';
+		updateGameResult;
 	} else dealerScoreHtml.innerHTML = dealerHandValue;
 }
 
 function updateGameResult() {
-	//ends the hand and evaluates win/lose/split situations
-	document.getElementById('hit').disabled = true;
-	document.getElementById('pass').disabled = true;
+	//ends the hand and evaluates win/lose/split situations and ends the current game in progress
+	gameInProg = false;
 	if (
 		(dealerHandValue > playerHandValue && dealerHandValue <= 21) ||
 		playerHandValue > 21
@@ -200,7 +183,24 @@ function updateGameResult() {
 		stackSize += parseInt(betSize);
 		stackSizeHtml.innerHTML = stackSize;
 	}
+	updateGameProg();
 }
+
+function updateGameProg() {
+	if (gameInProg) {
+		resetHtml.disabled = true;
+		submitBetHtml.disabled = true;
+		document.getElementById('hit').disabled = false;
+		document.getElementById('pass').disabled = false;
+	} else {
+		resetHtml.disabled = false;
+		submitBetHtml.disabled = false;
+		document.getElementById('hit').disabled = true;
+		document.getElementById('pass').disabled = true;
+	}
+}
+
+//player controlled functions - hit, pass, submit bet, and reset hand.
 
 function hit() {
 	let newCard = randomCard();
@@ -222,27 +222,42 @@ function pass() {
 	updateGameResult();
 }
 
-function newDeal() {
-	//this is no longer the new deal, it is just a reset of hands and values to betting stage and settling betting from current round
-
+function reset() {
 	//only called by player to reset hands and bet size
 	newDeck = createDeck();
 	dealerHand = [];
 	playerHand = [];
-	dealerHandValue = handValue(dealerHand);
-	playerHandValue = handValue(playerHand);
+	dealerHandValue = 0;
+	playerHandValue = 0;
 
 	gameResultHtml.innerHTML = '';
 
 	//betting info updated for next round
 	//updateBet function to replace based on gamestatus?
 	betDisplayHtml.innerHTML = '';
-	betSize = 0;
-	submitBet.disabled = false;
 	stackSizeHtml.innerHTML = stackSize;
 	betSizeHtml.setAttribute('max', stackSize);
 	updatePlayer();
 	updateDealer();
+	updateGameProg();
+}
+
+function initBet() {
+	// betting and then hand initialize -- only runs when player has submitted bet.
+	// also deals new hands, this gives player control of when to start next round.
+	betSize = betSizeHtml.value;
+	stackSize -= betSize;
+	stackSizeHtml.innerHTML = stackSize;
+	betDisplayHtml.innerHTML = `<h2>Current bet is: </h2><h3>${betSize}</h3>`;
+	gameInProg = true;
+	dealerHand = [randomCard()];
+	playerHand = [randomCard(), randomCard()];
+	dealerHandValue = handValue(dealerHand);
+	playerHandValue = handValue(playerHand);
+
+	updatePlayer();
+	updateDealer();
+	updateGameProg();
 }
 
 //initial rendering of hands and scores
@@ -252,17 +267,17 @@ playerScoreHtml.innerHTML = playerHandValue;
 dealerScoreHtml.innerHTML = dealerHandValue;
 stackSizeHtml.innerHTML = stackSize;
 //initial rendering of hands and scores once a bet has been placed
-if (betSize != 0) {
-	playerHandHtml.innerHTML = playerHand
-		.map((card) => cardRender(card))
-		.join('');
-	dealerHandHtml.innerHTML = dealerHand
-		.map((card) => cardRender(card))
-		.join('');
-	playerScoreHtml.innerHTML = playerHandValue;
-	dealerScoreHtml.innerHTML = dealerHandValue;
-	stackSizeHtml.innerHTML = stackSize;
-}
+// if (betSize != 0) {
+// 	playerHandHtml.innerHTML = playerHand
+// 		.map((card) => cardRender(card))
+// 		.join('');
+// 	dealerHandHtml.innerHTML = dealerHand
+// 		.map((card) => cardRender(card))
+// 		.join('');
+// 	playerScoreHtml.innerHTML = playerHandValue;
+// 	dealerScoreHtml.innerHTML = dealerHandValue;
+// 	stackSizeHtml.innerHTML = stackSize;
+// }
 
 window.onload = () => {
 	alert(

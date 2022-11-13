@@ -10,5 +10,5 @@ Future features to implement
 4. Simple mouse control for hit, pass, and bet sizing
 5. Card counter
    a. Deck shuffling should support that
-6. Multiplayer
+6. Local Multiplayer
 7. Add help button for basic BlackJack
