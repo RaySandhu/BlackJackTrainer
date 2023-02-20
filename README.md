@@ -2,6 +2,9 @@
 
 Single player BlackJack with simple, unambitious HTML art to kill time.
 
+Play Here!
+https://raysandhu.github.io/BlackJackTrainer/
+
 Future features to implement
 
 1. Chip system
