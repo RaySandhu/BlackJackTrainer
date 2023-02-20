@@ -147,6 +147,7 @@ function updatePlayer() {
 		.join('');
 	if (playerHandValue > 21) {
 		updateGameResult();
+		playerHandHtml.innerHTML = playerHand;
 	} else playerScoreHtml.innerHTML = playerHandValue;
 
 	//betting info
@@ -162,6 +163,7 @@ function updateDealer() {
 		.join('');
 	if (dealerHandValue > 21) {
 		updateGameResult;
+		dealerScoreHtml.innerHTML = dealerHandValue;
 	} else dealerScoreHtml.innerHTML = dealerHandValue;
 }
 
@@ -266,6 +268,7 @@ dealerHandHtml.innerHTML = dealerHand.map((card) => cardRender(card)).join('');
 playerScoreHtml.innerHTML = playerHandValue;
 dealerScoreHtml.innerHTML = dealerHandValue;
 stackSizeHtml.innerHTML = stackSize;
+updateGameProg();
 //initial rendering of hands and scores once a bet has been placed
 // if (betSize != 0) {
 // 	playerHandHtml.innerHTML = playerHand
